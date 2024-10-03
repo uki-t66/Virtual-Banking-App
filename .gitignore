@@ -1,0 +1,34 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# ビルド出力
+dist/
+build/
+
+# 環境設定ファイル
+.env
+.env.local
+.env.*.local
+
+# macOS固有のファイル
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# エディタ設定
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ログと一時ファイル
+*.log
+tmp/
+temp/
+
+# TailwindCSS
+tailwind.output.css
+
+# その他のプロジェクト固有の除外項目
