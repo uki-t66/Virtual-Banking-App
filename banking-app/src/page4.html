@@ -3,9 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link href="../dist/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Banking app</title>
 </head>
-<body>
-    
+<body class=" bg-gray-700">
+    <div class="h-screen w-screen flex justify-center items-center">
+        <div class="container grid grid-cols-1 space-y-6 bg-white w-1/2 h-2/3 p-6">
+            <div class="container flex justify-center items-center">
+                <h2 class="text-4xl">The money you are going to take is …</h2>
+            </div>
+            <div class="container flex flex-col justify-between bg-[#1A4567] mx-auto w-2/3 p-2">
+                <p class="text-2xl flex justify-end border-2 border-white text-white p-2">5 x $100</p>
+                <p class="text-2xl flex justify-end border-2 border-white text-white p-2">1 x $50</p>
+                <p class="text-2xl flex justify-end border-2 border-white text-white p-2">2 x $20</p>
+                <p class="text-2xl flex justify-end border-2 border-white text-white p-2">1 x $5</p>
+                <p class="text-2xl flex justify-end border-2 border-white text-white p-2">4 x $1</p>
+                <p class="text-2xl flex justify-end text-white p-2">total: $599</p>
+            </div>
+            <div class="container flex items-center justify-center">
+                <a href="" class="flex items-center justify-center border border-blue-800 text-blue-600 w-1/2 h-2/3 mr-4 rounded hover:text-white hover:bg-blue-600 hover:transition duration-300 ease-in-out"><button>Go Back</button></a>
+                <a href="" class="flex items-center justify-center border border-blue-800 bg-blue-600 w-1/2 h-2/3 rounded text-white hover:bg-opacity-75 hover:transition duration-300 ease-in-out"><button>Confirm</button></a>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="./main.js"></script>
 </body>
 </html>
