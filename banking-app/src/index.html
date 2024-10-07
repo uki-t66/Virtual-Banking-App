@@ -4,31 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../dist/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Banking app</title>
 </head>
-<body class=" bg-gray-700">
-    <div class="grid place-items-center h-screen">
-        <div class="grid gap-3 border border-gray-500 w-2/3 h-1/3 bg-white px-6 py-6">
-            <div class="grid place-items-center ">
-                <h2 class="text-black text-3xl">Please type your information below</h2>
+<body>
+    <!-- 初期フォームページ -->
+    <div id="initial-form" class="bg-gray-700 flex items-center justify-center h-screen">
+        <form class="grid grid-cols-1 gap-2 border border-gray-500 w-2/3 bg-white px-6 py-6">
+            <h2 class="text-black text-3xl text-center">Please type your information below</h2>
+            <input type="email" id="email" placeholder="Email" class="border border-gray-500 p-1" required>
+            <input type="text" id="first-name" placeholder="First name" class="border border-gray-500 p-1" required>
+            <input type="text" id="last-name" placeholder="Last name" class="border border-gray-500 p-1" required>
+            <input type="number" id="deposit" placeholder="Enter your first deposit" class="border border-gray-500 p-1" required min="0" step="0.01">
+            <div class="flex justify-center space-x-4">
+                <label class="inline-flex items-center">
+                    <input type="radio" name="userAccountType" value="savings" checked required>
+                    <span class="pl-2">Savings</span>
+                </label>
+                <label class="inline-flex items-center">
+                    <input type="radio" name="userAccountType" value="checkings" required>
+                    <span class="pl-2">Checkings</span>
+                </label>
             </div>
-            <div class="grid grid-cols-2 gap-4">
-                <input type="text" id="first-name" placeholder=" First name" class=" border border-gray-500">
-                <input type="text" id="last-name" placeholder=" Last name" class=" border border-gray-500">
-            </div>
-            <div class="grid">
-                <input type="text" id="first-name" placeholder=" Enter your bank ID" class=" border border-gray-500">
-            </div>
-            <div class="grid">
-                <input type="text" id="first-name" placeholder=" Enter your first deposit" class=" border border-gray-500">
-            </div>
-            <a href="./page2.html" class="flex items-center justify-center text-white border border-blue-600 bg-blue-600 hover:bg-opacity-75">
-                <div>
-                    <button>Submit</button>
-                </div>
-            </a>
-        </div>
+            <button type="submit" class="w-full flex items-center justify-center text-white border border-blue-600 bg-blue-600 rounded p-2 font-bold hover:bg-opacity-75 transition duration-300 ease-in-out">Submit</button>
+        </form>
     </div>
+
+    <!-- メインバンクページ -->
+    <div id="bank-page"></div>
     <script type="module" src="./main.js"></script>
 </body>
 </html>
