@@ -2,7 +2,7 @@ import './input.css'
 
 const config = {
     initialForm: document.querySelector("#initial-form"),
-    bankPage: document.querySelector("#bank-page")
+    bankPage: document.querySelector("#main-bank-page")
 }
 
 class BankAccount{
@@ -29,7 +29,7 @@ const getRandomInteger = (min,max) => {
     return NumOfRandom;
 }
 
-// index.htmlのpage-1の"submit"がクリックされると入力されたデータに応じてオブジェクトを作成
+// index.htmlのinitial-formの"submit"がクリックされると入力されたデータに応じてオブジェクトを作成
 const initializeUserAccount = () => {
     const form = document.querySelector("#initial-form");
     let userBankAccount = new BankAccount(
@@ -44,7 +44,6 @@ const initializeUserAccount = () => {
 
     // ページを切り替え
     config.initialForm.style.display = "none";
-    console.log(config.bankPage)
     config.bankPage.append(mainBankPage(userBankAccount))
 
     console.log(userBankAccount);
@@ -60,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// main-bank-pageを表示
 const mainBankPage = (bankAccount) => {
     // メインコンテナの作成
     const bankPage = document.createElement('div');
@@ -109,7 +109,7 @@ const mainBankPage = (bankAccount) => {
     buttonSection.classList.add('grid', 'grid-cols-3', 'gap-2');
 
     const buttons = [
-        { text: 'WITHDRAWAL', icon: 'fa-wallet', link: './page3.html' },
+        { text: 'WITHDRAWAL', icon: 'fa-wallet'  },
         { text: 'DEPOSIT', icon: 'fa-coins' },
         { text: 'COME BACK LATER', icon: 'fa-house-chimney' }
     ];
@@ -117,7 +117,13 @@ const mainBankPage = (bankAccount) => {
     buttons.forEach((buttonInfo, index) => {
         const buttonContainer = document.createElement(index === 0 ? 'a' : 'button');
         buttonContainer.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'bg-[#1A4567]', 'hover:bg-opacity-75', 'cursor-pointer');
-        if (index === 0) buttonContainer.href = buttonInfo.link;
+        if (index === 0) {
+            buttonContainer.href = buttonInfo.link;
+            buttonContainer.addEventListener('click', (e) => {
+                e.preventDefault();
+                showWithdrawPage();
+            });
+        }
 
         const button = document.createElement(index === 0 ? 'button' : 'div');
         button.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'gap-3');
@@ -144,7 +150,130 @@ const mainBankPage = (bankAccount) => {
     return bankPage;
 };
 
+const showWithdrawPage = () => {
+    // メインバンクページを非表示にする
+    const mainBankPage = document.getElementById('main-bank-page');
+    mainBankPage.style.display = 'none';
 
+    // Withdrawページを表示する
+    const withdrawPage = document.getElementById('withdraw-page');
+    withdrawPage.innerHTML = ''; // 既存のコンテンツをクリア
 
+    const withdrawContent = `
+        <div id="withdraw" class="bg-gray-700 h-screen w-screen flex justify-center items-center">
+            <div class="container grid grid-cols-1 space-y-6 bg-white w-1/2 h-2/3 p-6">
+                <div class="container flex justify-center items-center">
+                    <h2 class="text-3xl">Please Enter The Withdrawal Amount</h2>
+                </div>
+                <div class="container w-full grid grid-cols-10 gap-4">
+                    ${[100, 50, 20, 10, 5, 1].map(value => `
+                        <label for="${value}" class="flex items-center justify-center col-span-2 text-xl">$${value}</label>
+                        <input type="number" id="${value}" class="border border-black col-span-8 p-2" min="0" value="0">
+                    `).join('')}
+                </div>
+                <div class="container flex items-center justify-center bg-[#1A4567]">
+                    <p id="total-amount" class="text-white">$0.00</p>
+                </div>
+                <div class="container flex items-center justify-center">
+                    <a href="#" class="flex items-center justify-center border border-blue-800 text-blue-600 w-1/2 h-2/3 mr-4 rounded font-bold hover:text-white hover:bg-blue-600 hover:transition duration-300 ease-in-out">
+                        <button>Go Back</button>
+                    </a>
+                    <a href="#" class="flex items-center justify-center border border-blue-800 bg-blue-600 w-1/2 h-2/3 rounded font-bold text-white hover:bg-opacity-75 hover:transition duration-300 ease-in-out">
+                        <button>Next</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    `;
+
+    withdrawPage.innerHTML = withdrawContent;
+    withdrawPage.style.display = 'block';
+
+    // トータル金額を計算し、表示を更新する関数
+    const updateTotal = () => {
+        const total = [100, 50, 20, 10, 5, 1].reduce((sum, value) => {
+            const input = document.getElementById(value.toString());
+            return sum + (parseInt(input.value) || 0) * value;
+        }, 0);
+        document.getElementById('total-amount').textContent = `$${total.toFixed(2)}`;
+    };
+
+    // 各入力フィールドにイベントリスナーを追加
+    [100, 50, 20, 10, 5, 1].forEach(value => {
+        const input = document.getElementById(value.toString());
+        input.addEventListener('input', updateTotal);
+    });
+
+    // Go Backボタンのイベントリスナーを追加
+    const goBackButton = withdrawPage.querySelector('a:first-of-type');
+    goBackButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        withdrawPage.style.display = 'none';
+        mainBankPage.style.display = 'block';
+    });
+
+    // Nextボタンのイベントリスナーを追加（必要に応じて実装）
+    const nextButton = withdrawPage.querySelector('a:last-of-type');
+    nextButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        const withdrawalData = [100, 50, 20, 10, 5, 1].map(value => ({
+            denomination: value,
+            count: parseInt(document.getElementById(value.toString()).value) || 0
+        }));
+        showConfirmationPage(withdrawalData);
+    });
+};
+
+const showConfirmationPage = (withdrawalData) => {
+    const withdrawPage = document.getElementById('withdraw-page');
+    withdrawPage.style.display = 'none';
+
+    const confirmationPage = document.getElementById('confirmation-page');
+    confirmationPage.innerHTML = ''; // 既存のコンテンツをクリア
+
+    const total = withdrawalData.reduce((sum, item) => sum + item.denomination * item.count, 0);
+
+    const confirmationContent = `
+        <div class="h-screen w-screen flex justify-center items-center bg-gray-700">
+            <div class="container grid grid-cols-1 space-y-6 bg-white w-1/2 h-2/3 p-6">
+                <div class="container flex justify-center items-center">
+                    <h2 class="text-4xl">The money you are going to take is …</h2>
+                </div>
+                <div class="container flex flex-col justify-between bg-[#1A4567] mx-auto w-2/3 p-2">
+                    ${withdrawalData.map(item => item.count > 0 ? 
+                        `<p class="text-2xl flex justify-end border-2 border-white text-white p-2">${item.count} x $${item.denomination}</p>` : 
+                        '').join('')}
+                    <p class="text-2xl flex justify-end text-white p-2">total: $${total.toFixed(2)}</p>
+                </div>
+                <div class="container flex items-center justify-center">
+                    <a href="#" class="flex items-center justify-center border border-blue-800 text-blue-600 w-1/2 h-2/3 mr-4 rounded font-bold hover:text-white hover:bg-blue-600 hover:transition duration-300 ease-in-out">
+                        <button>Go Back</button>
+                    </a>
+                    <a href="#" class="flex items-center justify-center border border-blue-800 bg-blue-600 w-1/2 h-2/3 rounded font-bold text-white hover:bg-opacity-75 hover:transition duration-300 ease-in-out">
+                        <button>Confirm</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    `;
+
+    confirmationPage.innerHTML = confirmationContent;
+    confirmationPage.style.display = 'block';
+
+    // Go Backボタンのイベントリスナーを追加
+    const goBackButton = confirmationPage.querySelector('a:first-of-type');
+    goBackButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        confirmationPage.style.display = 'none';
+        showWithdrawPage(); // Withdraw画面に戻る
+    });
+
+    // Confirmボタンのイベントリスナーを追加（必要に応じて実装）
+    const confirmButton = confirmationPage.querySelector('a:last-of-type');
+    confirmButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        // ここに確認後の処理を実装
+    });
+};
 
 
