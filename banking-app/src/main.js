@@ -1,4 +1,5 @@
 import './input.css'
+let userBankAccount;
 
 const config = {
     initialForm: document.querySelector("#initial-form"),
@@ -32,21 +33,18 @@ const getRandomInteger = (min,max) => {
 // index.htmlのinitial-formの"submit"がクリックされると入力されたデータに応じてオブジェクトを作成
 const initializeUserAccount = () => {
     const form = document.querySelector("#initial-form");
-    let userBankAccount = new BankAccount(
+    userBankAccount = new BankAccount(
         form.querySelector("#first-name").value,
         form.querySelector("#last-name").value,
         form.querySelector("#email").value,
         form.querySelector("input[name='userAccountType']:checked").value,
         getRandomInteger(1, Math.pow(10,8)),
-        // int型として渡します。
         parseInt(form.querySelector("#deposit").value)
-    )
+    );
 
     // ページを切り替え
-    config.initialForm.style.display = "none";
-    config.bankPage.append(mainBankPage(userBankAccount))
-
-    console.log(userBankAccount);
+    form.style.display = "none";
+    updateAndShowMainBankPage();
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -109,32 +107,28 @@ const mainBankPage = (bankAccount) => {
     buttonSection.classList.add('grid', 'grid-cols-3', 'gap-2');
 
     const buttons = [
-        { text: 'WITHDRAWAL', icon: 'fa-wallet'  },
-        { text: 'DEPOSIT', icon: 'fa-coins' },
-        { text: 'COME BACK LATER', icon: 'fa-house-chimney' }
+        { text: 'WITHDRAWAL', icon: 'fa-wallet', onClick: showWithdrawPage },
+        { text: 'DEPOSIT', icon: 'fa-coins', onClick: showDepositPage },
+        { text: 'COME BACK LATER', icon: 'fa-house-chimney', onClick: showComeBackLaterPage }
     ];
-
+    
     buttons.forEach((buttonInfo, index) => {
-        const buttonContainer = document.createElement(index === 0 ? 'a' : 'button');
+        const buttonContainer = document.createElement('button');
         buttonContainer.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'bg-[#1A4567]', 'hover:bg-opacity-75', 'cursor-pointer');
-        if (index === 0) {
-            buttonContainer.href = buttonInfo.link;
-            buttonContainer.addEventListener('click', (e) => {
-                e.preventDefault();
-                showWithdrawPage();
-            });
+        if (buttonInfo.onClick) {
+            buttonContainer.addEventListener('click', buttonInfo.onClick);
         }
-
-        const button = document.createElement(index === 0 ? 'button' : 'div');
+    
+        const button = document.createElement('div');
         button.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'gap-3');
-
+    
         const span = document.createElement('span');
         span.classList.add('text-2xl', 'text-white');
         span.textContent = buttonInfo.text;
-
+    
         const icon = document.createElement('i');
         icon.classList.add('fa-solid', buttonInfo.icon, 'text-4xl', 'text-white');
-
+    
         button.appendChild(span);
         button.appendChild(icon);
         buttonContainer.appendChild(button);
@@ -148,6 +142,21 @@ const mainBankPage = (bankAccount) => {
     bankPage.appendChild(innerContainer);
 
     return bankPage;
+};
+
+const updateAndShowMainBankPage = () => {
+    const mainBankPageElement = document.getElementById('main-bank-page');
+    const confirmationPage = document.getElementById('confirmation-page');
+    const withdrawPage = document.getElementById('withdraw-page');
+
+    // 他のページを非表示にする
+    if (confirmationPage) confirmationPage.style.display = 'none';
+    if (withdrawPage) withdrawPage.style.display = 'none';
+
+    // メインバンクページの内容を更新
+    mainBankPageElement.innerHTML = '';
+    mainBankPageElement.appendChild(mainBankPage(userBankAccount));
+    mainBankPageElement.style.display = 'block';
 };
 
 const showWithdrawPage = () => {
@@ -268,12 +277,184 @@ const showConfirmationPage = (withdrawalData) => {
         showWithdrawPage(); // Withdraw画面に戻る
     });
 
-    // Confirmボタンのイベントリスナーを追加（必要に応じて実装）
+    // Confirmボタンのイベントリスナーを更新
     const confirmButton = confirmationPage.querySelector('a:last-of-type');
     confirmButton.addEventListener('click', (e) => {
         e.preventDefault();
-        // ここに確認後の処理を実装
+        const totalWithdrawal = withdrawalData.reduce((sum, item) => sum + item.denomination * item.count, 0);
+        
+        // 残高を更新
+        userBankAccount.money -= totalWithdrawal;
+
+        // メインバンクページを更新して表示
+        updateAndShowMainBankPage();
     });
 };
 
+const showDepositPage = () => {
+    // メインバンクページを非表示にする
+    const mainBankPage = document.getElementById('main-bank-page');
+    mainBankPage.style.display = 'none';
 
+    // Depositページを表示する
+    const depositPage = document.getElementById('deposit-page');
+    depositPage.innerHTML = ''; // 既存のコンテンツをクリア
+
+    const depositContent = `
+        <div class="h-screen w-screen flex items-center justify-center bg-gray-700">
+            <div class="container grid grid-cols-1 gap-4 w-2/3 bg-white p-6">
+                <div class="container flex justify-center items-center ">
+                    <h2 class="text-4xl">Please Enter The Deposit Amount</h2>
+                </div>
+                <div>
+                    <input type="text" id="deposit-amount" placeholder="$0" class="border-2 border-gray-300 w-full p-2">
+                </div>
+                <div class="container flex items-center justify-center">
+                    <a href="#" class="flex items-center justify-center border border-blue-800 text-blue-600 w-1/2 h-2/3 p-4 mr-4 rounded font-bold hover:text-white hover:bg-blue-600 hover:transition duration-300 ease-in-out">
+                        <button>Go Back</button>
+                    </a>
+                    <a href="#" class="flex items-center justify-center border border-blue-800 bg-blue-600 w-1/2 h-2/3 p-4 rounded font-bold text-white hover:bg-opacity-75 hover:transition duration-300 ease-in-out">
+                        <button>Confirm</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    `;
+
+    depositPage.innerHTML = depositContent;
+    depositPage.style.display = 'block';
+
+    // Go Backボタンのイベントリスナーを追加
+    const goBackButton = depositPage.querySelector('a:first-of-type');
+    goBackButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        depositPage.style.display = 'none';
+        mainBankPage.style.display = 'block';
+    });
+
+    // Confirmボタンのイベントリスナーを追加
+    const confirmButton = depositPage.querySelector('a:last-of-type');
+    confirmButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        const depositAmount = parseFloat(document.getElementById('deposit-amount').value.replace('$', ''));
+        if (isNaN(depositAmount) || depositAmount <= 0) {
+            alert('Please enter a valid deposit amount.');
+            return;
+        }
+        showDepositConfirmationPage(depositAmount);
+    });
+};
+
+const showDepositConfirmationPage = (depositAmount) => {
+    const depositPage = document.getElementById('deposit-page');
+    depositPage.style.display = 'none';
+
+    const confirmationPage = document.getElementById('deposit-confirmation-page');
+    confirmationPage.innerHTML = ''; // 既存のコンテンツをクリア
+
+    const confirmationContent = `
+        <div class="h-screen w-screen flex items-center justify-center bg-gray-700">
+            <div class="container grid grid-cols-1 gap-4 w-2/3 bg-white p-6">
+                <div class="container flex justify-center items-center">
+                    <h2 class="text-4xl">Confirm Your Deposit</h2>
+                </div>
+                <div class="container flex flex-col justify-between bg-[#1A4567] mx-auto w-2/3 p-4">
+                    <p class="text-2xl text-white text-center">You are about to deposit:</p>
+                    <p class="text-3xl text-white text-center font-bold">$${depositAmount.toFixed(2)}</p>
+                </div>
+                <div class="container flex items-center justify-center">
+                    <a href="#" class="flex items-center justify-center border border-blue-800 text-blue-600 w-1/2 h-2/3 p-4 mr-4 rounded font-bold hover:text-white hover:bg-blue-600 hover:transition duration-300 ease-in-out">
+                        <button>Go Back</button>
+                    </a>
+                    <a href="#" class="flex items-center justify-center border border-blue-800 bg-blue-600 w-1/2 h-2/3 p-4 rounded font-bold text-white hover:bg-opacity-75 hover:transition duration-300 ease-in-out">
+                        <button>Confirm</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    `;
+
+    confirmationPage.innerHTML = confirmationContent;
+    confirmationPage.style.display = 'block';
+
+    // Go Backボタンのイベントリスナーを追加
+    const goBackButton = confirmationPage.querySelector('a:first-of-type');
+    goBackButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        confirmationPage.style.display = 'none';
+        showDepositPage(); // 入金ページに戻る
+    });
+
+    // Confirmボタンのイベントリスナーを追加
+    const confirmButton = confirmationPage.querySelector('a:last-of-type');
+    confirmButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        userBankAccount.money += depositAmount;
+        updateAndShowMainBankPage();
+    });
+};
+
+const showComeBackLaterPage = () => {
+    const mainBankPage = document.getElementById('main-bank-page');
+    mainBankPage.style.display = 'none';
+
+    const comeBackLaterPage = document.getElementById('come-back-later-page');
+    comeBackLaterPage.innerHTML = ''; // 既存のコンテンツをクリア
+
+    const content = `
+        <div class="h-screen w-screen flex items-center justify-center bg-gray-700">
+            <div class="container grid grid-cols-1 gap-4 w-2/3 bg-white p-6">
+                <div class="container flex justify-center items-center">
+                    <h2 class="text-4xl">Come Back Later</h2>
+                </div>
+                <div>
+                    <label for="days-away" class="block text-sm font-medium text-gray-700">Number of days to come back later:</label>
+                    <input type="number" id="days-away" min="1" class="mt-1 block w-full border-2 border-gray-300 p-2" placeholder="Enter number of days">
+                </div>
+                <div class="container flex items-center justify-center">
+                    <a href="#" class="flex items-center justify-center border border-blue-800 text-blue-600 w-1/2 h-2/3 p-4 mr-4 rounded font-bold hover:text-white hover:bg-blue-600 hover:transition duration-300 ease-in-out">
+                        <button>Go Back</button>
+                    </a>
+                    <a href="#" class="flex items-center justify-center border border-blue-800 bg-blue-600 w-1/2 h-2/3 p-4 rounded font-bold text-white hover:bg-opacity-75 hover:transition duration-300 ease-in-out">
+                        <button>Confirm</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    `;
+
+    comeBackLaterPage.innerHTML = content;
+    comeBackLaterPage.style.display = 'block';
+
+    // Go Backボタンのイベントリスナーを追加
+    const goBackButton = comeBackLaterPage.querySelector('a:first-of-type');
+    goBackButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        comeBackLaterPage.style.display = 'none';
+        mainBankPage.style.display = 'block';
+    });
+
+    // Confirmボタンのイベントリスナーを追加
+    const confirmButton = comeBackLaterPage.querySelector('a:last-of-type');
+    confirmButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        const daysAway = parseInt(document.getElementById('days-away').value);
+        if (isNaN(daysAway) || daysAway <= 0) {
+            alert('Please enter a valid number of days.');
+            return;
+        }
+        calculateInterest(daysAway);
+    });
+};
+
+const calculateInterest = (days) => {
+    const annualInterestRate = 0.10; // 10% annual interest rate
+    const dailyInterestRate = annualInterestRate / 365;
+    const interestEarned = userBankAccount.money * dailyInterestRate * days;
+    const newBalance = userBankAccount.money + interestEarned;
+
+    userBankAccount.money = newBalance;
+
+    alert(`You've earned $${interestEarned.toFixed(2)} in interest. Your new balance is $${newBalance.toFixed(2)}.`);
+    updateAndShowMainBankPage();
+};
