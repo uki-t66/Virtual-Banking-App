@@ -42,5 +42,4 @@ URL :  https://uki-t66.github.io/Virtual-Banking-App/
 
 - JavaScriptによるDOM操作
 - JavaScriptのイベントハンドリング
-- vanilla JSアプリケーションでの状態管理
-- Tailwind CSSそスタイリング
+- Tailwind CSSのスタイリング
