@@ -6,27 +6,27 @@
     <link href="../dist/output.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Banking app</title>
-  <script type="module" crossorigin src="/Virtual-Banking-App/assets/index-CN6HnUDl.js"></script>
+  <script type="module" crossorigin src="/Virtual-Banking-App/assets/index-BjQvbGM7.js"></script>
   <link rel="stylesheet" crossorigin href="/Virtual-Banking-App/assets/index-DOMRbDpF.css">
 </head>
 <body>
     <!-- 初期フォームページ -->
     <div id="initial-form" class="bg-gray-700 flex items-center justify-center h-screen">
-        <form class="grid grid-cols-1 gap-2 border border-gray-500 w-2/3  bg-white px-6 py-6">
-            <div class="grid place-items-center ">
-                <h2 class="text-black text-3xl">Please type your information below</h2>
+        <form class="grid grid-cols-1 gap-4 border border-gray-500 w-2/3  bg-white  p-6">
+            <div class="grid place-items-center">
+                <h2 class="text-black text-3xl p-4">Please type your information below</h2>
             </div>
             <div class="grid">
-                <input type="email" id="email" placeholder=" Email" class=" border border-gray-500 p-1">
-            </div>
-            <div class="grid grid-cols-1">
-                <input type="text" id="first-name" placeholder=" First name" class=" border border-gray-500 p-1">
-            </div>
-            <div class="grid grid-cols-1">
-                <input type="text" id="last-name" placeholder=" Last name" class=" border border-gray-500 p-1">
+                <input type="email" id="email" placeholder=" Email" class=" border border-gray-500 p-2">
             </div>
             <div class="grid">
-                <input type="number" id="deposit" placeholder=" Enter your first deposit" class=" border border-gray-500 p-1">
+                <input type="text" id="first-name" placeholder=" First name" class=" border border-gray-500 p-2">
+            </div>
+            <div class="grid">
+                <input type="text" id="last-name" placeholder=" Last name" class=" border border-gray-500 p-2">
+            </div>
+            <div class="grid">
+                <input type="number" id="deposit" placeholder=" Enter your first deposit" class=" border border-gray-500 p-2">
             </div>
             <div class="flex justify-center">
                 <input class="" type="radio" name="userAccountType" id="userAccountType1" value="savings" checked required>
@@ -40,7 +40,7 @@
                     Checkings
                 </label>
             </div>
-            <div class="flex items-center justify-center w-full">
+            <div class="flex items-center justify-center w-full p-2">
                 <button type="submit" class="w-full flex items-center justify-center text-white border border-blue-600 bg-blue-600 rounded p-2 font-bold hover:bg-opacity-75 hover:transition duration-300 ease-in-out">Submit</button>
             </div>
     </form>
