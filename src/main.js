@@ -76,7 +76,7 @@ const mainBankPage = (bankAccount) => {
     const userInfoItems = [
         `Your Name: ${bankAccount.firstName} ${bankAccount.lastName}`,
         `Your Bank ID: ${bankAccount.accountNumber}`,
-        `Your First Deposit: $${bankAccount.initialDeposit.toFixed(2)}`
+        `Your First Deposit: $${bankAccount.initialDeposit}`
     ];
 
     userInfoItems.forEach((item, index) => {
@@ -148,15 +148,28 @@ const updateAndShowMainBankPage = () => {
     const mainBankPageElement = document.getElementById('main-bank-page');
     const confirmationPage = document.getElementById('confirmation-page');
     const withdrawPage = document.getElementById('withdraw-page');
+    const depositPage = document.getElementById('deposit-page');
+    const depositConfirmationPage = document.getElementById('deposit-confirmation-page');
+    const comeBackLaterPage = document.getElementById('come-back-later-page');
 
     // 他のページを非表示にする
-    if (confirmationPage) confirmationPage.style.display = 'none';
-    if (withdrawPage) withdrawPage.style.display = 'none';
+    [confirmationPage, withdrawPage, depositPage, depositConfirmationPage, comeBackLaterPage].forEach(page => {
+        if (page) page.style.display = 'none';
+    });
 
     // メインバンクページの内容を更新
     mainBankPageElement.innerHTML = '';
     mainBankPageElement.appendChild(mainBankPage(userBankAccount));
     mainBankPageElement.style.display = 'block';
+
+    // ボタンのイベントリスナーを再設定
+    const withdrawalButton = mainBankPageElement.querySelector('button:nth-of-type(1)');
+    const depositButton = mainBankPageElement.querySelector('button:nth-of-type(2)');
+    const comeBackLaterButton = mainBankPageElement.querySelector('button:nth-of-type(3)');
+
+    withdrawalButton.addEventListener('click', showWithdrawPage);
+    depositButton.addEventListener('click', showDepositPage);
+    comeBackLaterButton.addEventListener('click', showComeBackLaterPage);
 };
 
 const showWithdrawPage = () => {
@@ -329,7 +342,7 @@ const showDepositPage = () => {
     goBackButton.addEventListener('click', (e) => {
         e.preventDefault();
         depositPage.style.display = 'none';
-        mainBankPage.style.display = 'block';
+        updateAndShowMainBankPage();
     });
 
     // Confirmボタンのイベントリスナーを追加
@@ -344,6 +357,7 @@ const showDepositPage = () => {
         showDepositConfirmationPage(depositAmount);
     });
 };
+
 
 const showDepositConfirmationPage = (depositAmount) => {
     const depositPage = document.getElementById('deposit-page');
