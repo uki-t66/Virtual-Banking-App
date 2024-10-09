@@ -1,6 +1,7 @@
 # Virtual-Banking-App
 
-このプロジェクトは、RecursionCSカリキュラムのフロントエンドプロジェクト3の一部として作成されたVirtual-Banking-Appです。
+このプロジェクトは、RecursionCSカリキュラムのフロントエンドプロジェクト3の一部として作成されたVirtual-Banking-Appです。  
+URL :  https://uki-t66.github.io/Virtual-Banking-App/
 
 ## プロジェクト概要
 
