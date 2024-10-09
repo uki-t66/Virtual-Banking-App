@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../dist/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Banking app</title>
+  <script type="module" crossorigin src="/Virtual-Banking-App/assets/index-D-Ft1_2G.js"></script>
+  <link rel="stylesheet" crossorigin href="/Virtual-Banking-App/assets/index-DpvKH1wq.css">
+</head>
+<body>
+    <!-- 初期フォームページ -->
+    <div id="initial-form" class="bg-gray-700 flex items-center justify-center h-screen">
+        <form class="grid grid-cols-1 gap-2 border border-gray-500 w-2/3  bg-white px-6 py-6">
+            <div class="grid place-items-center ">
+                <h2 class="text-black text-3xl">Please type your information below</h2>
+            </div>
+            <div class="grid">
+                <input type="email" id="email" placeholder=" Email" class=" border border-gray-500 p-1">
+            </div>
+            <div class="grid grid-cols-1">
+                <input type="text" id="first-name" placeholder=" First name" class=" border border-gray-500 p-1">
+            </div>
+            <div class="grid grid-cols-1">
+                <input type="text" id="last-name" placeholder=" Last name" class=" border border-gray-500 p-1">
+            </div>
+            <div class="grid">
+                <input type="number" id="deposit" placeholder=" Enter your first deposit" class=" border border-gray-500 p-1">
+            </div>
+            <div class="flex justify-center">
+                <input class="" type="radio" name="userAccountType" id="userAccountType1" value="savings" checked required>
+                <label class="pl-2" for="userAccountType1">
+                    Savings
+                </label>
+            </div>
+            <div class="flex justify-center">
+                <input class="" type="radio" name="userAccountType" id="userAccountType2" value="checkings" required>
+                <label class="pl-2" for="userAccountType2">
+                    Checkings
+                </label>
+            </div>
+            <div class="flex items-center justify-center w-full">
+                <button type="submit" class="w-full flex items-center justify-center text-white border border-blue-600 bg-blue-600 rounded p-2 font-bold hover:bg-opacity-75 hover:transition duration-300 ease-in-out">Submit</button>
+            </div>
+    </form>
+    </div>
+
+    <!-- メインバンクページ -->
+    <div id="main-bank-page">
+
+    </div>
+
+    <!-- Withdrawページ -->
+    <div id="withdraw-page">
+
+    </div>
+
+    <!-- Withdraw金額の確認ページ -->
+    <div id="confirmation-page">
+
+    </div>
+
+    <!-- Depositページ -->
+    <div id="deposit-page">
+
+    </div>
+
+    <!-- Deposit金額の確認ページ -->
+    <div id="deposit-confirmation-page">
+
+    </div>
+
+    <!-- Come back laterページ -->
+    <div id="come-back-later-page">
+
+    </div>
+    
+</body>
+</html>
