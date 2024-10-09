@@ -3,9 +3,9 @@ import { resolve } from 'path'
 
 export default defineConfig({
   base: '/Virtual-Banking-App/',
-  root: 'src',
+  root: '.',
   build: {
-    outDir: '../dist',
+    outDir: 'dist',
     emptyOutDir: true,
   },
   resolve: {
