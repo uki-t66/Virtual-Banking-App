@@ -13,7 +13,7 @@ URL :  https://uki-t66.github.io/Virtual-Banking-App/
 - 預金機能
 - 引き出し機能
 - 口座残高の表示
-- 「後で戻る」機能（一定期間後の利息計算）
+- 「COME BACK LATER」機能（一定期間後の利息計算）
 
 ## 使用技術
 
